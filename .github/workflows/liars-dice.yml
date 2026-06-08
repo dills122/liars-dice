@@ -1,0 +1,138 @@
+name: Liars Dice
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'players/*'
+
+jobs:
+  run-game:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.11'
+
+      - name: Detect challenger
+        id: challenger
+        run: |
+          git fetch origin main
+          new_file=$(git diff --name-only origin/main HEAD -- players/ | head -1)
+          player=$(basename "$new_file" .py)
+          echo "name=$player" >> "$GITHUB_OUTPUT"
+
+      - name: Install dependencies
+        run: uv sync --no-install-project
+
+      - name: Restore leaderboard from main
+        run: |
+          git checkout origin/main -- leaderboard.yaml \
+            || printf 'total_runs: 0\nlast_updated: null\nplayers: {}\n' > leaderboard.yaml
+
+      - name: Run game
+        run: uv run python -m game ${{ vars.N_GAMES || '100' }} ${{ vars.TOP_N || '4' }} 2>&1 | tee game_output.txt
+
+      - name: Evaluate result
+        id: result
+        env:
+          CHALLENGER: ${{ steps.challenger.outputs.name }}
+        run: |
+          python3 - <<'EOF'
+import yaml, os
+
+challenger = os.environ["CHALLENGER"]
+with open("leaderboard.yaml") as f:
+    lb = yaml.safe_load(f) or {}
+players = lb.get("players", {})
+made_it = challenger in players and players[challenger].get("is_active", False)
+
+with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+    out.write(f"made_it={'true' if made_it else 'false'}\n")
+
+with open("game_output.txt") as f:
+    game_output = f.read().strip()
+
+rows = []
+for name, p in players.items():
+    status = "✅" if p.get("is_active") else "❌"
+    bold = "**" if name == challenger else ""
+    rows.append(f"| {bold}{name}{bold} | {p['win_pct']}% | {p['total_wins']}/{p['total_games']} | {status} |")
+table = "| Player | Win % | Record | Active |\n|--------|-------|--------|--------|\n" + "\n".join(rows)
+
+fence = "```"
+if made_it:
+    body = f"""## 🎲 {challenger} made the leaderboard!
+
+<details><summary>Game results</summary>
+
+{fence}
+{game_output}
+{fence}
+</details>
+
+### Current Leaderboard
+{table}
+
+This PR will be merged automatically."""
+else:
+    p_data = players.get(challenger)
+    if p_data:
+        detail = f"**{challenger}** finished with **{p_data['win_pct']}%** win rate ({p_data['total_wins']}/{p_data['total_games']} games)."
+    else:
+        detail = f"**{challenger}** did not beat the minimum win rate to qualify."
+    body = f"""## 🎲 {challenger} did not make the leaderboard
+
+{detail} To qualify, a challenger must beat the current lowest win rate among active players.
+
+<details><summary>Game results</summary>
+
+{fence}
+{game_output}
+{fence}
+</details>
+
+### Current Leaderboard
+{table}
+
+This PR has been left open — improve your strategy and push a new commit to try again."""
+
+with open("comment.md", "w") as f:
+    f.write(body)
+EOF
+
+      - name: Post comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr comment ${{ github.event.pull_request.number }} --body-file comment.md
+
+      - name: Commit leaderboard
+        if: steps.result.outputs.made_it == 'true'
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add leaderboard.yaml
+          if ! git diff --cached --quiet; then
+            git commit -m "ci: update leaderboard [skip ci]"
+            git push
+          fi
+
+      - name: Enable auto-merge
+        if: steps.result.outputs.made_it == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge ${{ github.event.pull_request.number }} --auto --squash
+
+      - name: Fail if challenger did not qualify
+        if: steps.result.outputs.made_it == 'false'
+        run: exit 1
