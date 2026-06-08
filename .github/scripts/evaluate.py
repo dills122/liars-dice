@@ -219,11 +219,11 @@ def _write_comment(
     if all_pending:
         sections.append("**Pending next PR:**\n" + "\n".join(pending_notes) + "\n")
 
-    for prefix, label in [
-        (entry_prefix, TIER_LABELS[challenger_tier]),
-        ("prm", "Premier Division"),
-        ("l1", "League One"),
-    ]:
+    result_sections = [(entry_prefix, TIER_LABELS[challenger_tier])]
+    if entry_prefix != "prm":
+        result_sections.append(("prm", "Premier Division"))
+    result_sections.append(("l1", "League One"))
+    for prefix, label in result_sections:
         output = load_output(prefix)
         if output:
             sections.append(
