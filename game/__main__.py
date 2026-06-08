@@ -86,6 +86,10 @@ else:
     # Local run with no tier filter: include all known players
     players = [p for p in all_players if p.name in _lb_players] or all_players
 
+if len(players) < 2:
+    print(f"[skip] Only {len(players)} player(s) in --tier {args.tier} — no game run.")
+    raise SystemExit(0)
+
 print(f"Playing: {[p.name for p in players]}")
 
 wins = run_series(players, N_GAMES)

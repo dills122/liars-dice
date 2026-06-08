@@ -36,13 +36,14 @@ def load_output(prefix: str) -> str:
     return open(path).read().strip() if os.path.exists(path) else ""
 
 
-def ranked(results: dict[str, int], lb_data: dict | None = None) -> list[tuple[str, int]]:
-    """Sort by wins desc; tiebreak on total_games desc then tier_since asc."""
+def ranked(results: dict[str, int], lb_data: dict | None = None, tier: str = "") -> list[tuple[str, int]]:
+    """Sort by wins desc; tiebreak on tier games desc then tier_since asc."""
     players = (lb_data or {}).get("players", {})
     def _key(item: tuple[str, int]):
         name, wins = item
         p = players.get(name, {})
-        return (-wins, -p.get("total_games", 0), p.get("tier_since", ""))
+        tier_games = p.get("tier_stats", {}).get(tier, {}).get("games", 0)
+        return (-wins, -tier_games, p.get("tier_since", ""))
     return sorted(results.items(), key=_key)
 
 
@@ -72,7 +73,7 @@ def main():
 
     # --- Entry league cascade ---
     if entry_results:
-        r = ranked(entry_results, lb)
+        r = ranked(entry_results, lb, challenger_tier)
         winner, last = r[0][0], r[-1][0]
         existing = set(get_tier_players(lb, challenger_tier))
 
@@ -117,7 +118,7 @@ def main():
 
     # --- PRM cascade ---
     if prm_results:
-        r = ranked(prm_results, lb)
+        r = ranked(prm_results, lb, "PRM")
         prm_last = r[-1][0]
         prm_pending.append({
             "player": prm_last,
@@ -127,7 +128,7 @@ def main():
 
     # --- L1 cascade ---
     if l1_results:
-        r = ranked(l1_results, lb)
+        r = ranked(l1_results, lb, "L1")
         l1_winner, last_in_l1 = r[0][0], r[-1][0]
         l1_promotions[l1_winner] = "CH"
         l1_roster = set(get_tier_players(lb, "L1"))
@@ -203,13 +204,17 @@ def _write_comment(
     for tier_key in ("PRM", "CH", "L1", "inactive"):
         tier_players = sorted(
             [(n, p) for n, p in players.items() if p.get("tier") == tier_key],
-            key=lambda x: x[1].get("win_pct", 0), reverse=True,
+            key=lambda x: x[1].get("tier_stats", {}).get(tier_key, {}).get("win_pct", 0),
+            reverse=True,
         )
         for name, p in tier_players:
+            ts = p.get("tier_stats", {}).get(tier_key, {})
+            win_pct = ts.get("win_pct", 0.0)
+            games = ts.get("games", 0)
             bold = "**" if name == challenger else ""
             table.append(
                 f"| {bold}{name}{bold} | {TIER_LABELS[tier_key]} | "
-                f"{p.get('win_pct', 0)}% | {p.get('total_games', 0)} | "
+                f"{win_pct}% | {games} | "
                 f"{str(p.get('tier_since', ''))[:10]} |"
             )
 

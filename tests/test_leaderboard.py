@@ -82,9 +82,10 @@ def test_update_stats_for_competing_players(lb_file):
     )
     with open(lb_file) as f:
         result = yaml.safe_load(f)
-    assert result["players"]["Alice"]["total_wins"] == 100   # 40 + 60
-    assert result["players"]["Alice"]["total_games"] == 200  # 100 + 100
-    assert result["players"]["Alice"]["win_pct"] == 50.0
+    prm = result["players"]["Alice"]["tier_stats"]["PRM"]
+    assert prm["wins"] == 100   # 40 + 60
+    assert prm["games"] == 200  # 100 + 100
+    assert prm["win_pct"] == 50.0
 
 def test_update_does_not_touch_non_competing_players(tmp_path, full_two_tier_lb):
     import yaml as _yaml
@@ -100,7 +101,7 @@ def test_update_does_not_touch_non_competing_players(tmp_path, full_two_tier_lb)
     )
     with open(path) as f:
         result = _yaml.safe_load(f)
-    assert result["players"]["Alice"]["total_games"] == 100  # unchanged
+    assert result["players"]["Alice"]["tier_stats"]["PRM"]["games"] == 100  # unchanged
 
 def test_promotions_change_tier_immediately(lb_file):
     update_leaderboard(
@@ -175,8 +176,10 @@ def test_update_creates_new_player_with_defaults(lb_file):
         result = yaml.safe_load(f)
     assert "NewPlayer" in result["players"]
     np = result["players"]["NewPlayer"]
-    assert np["total_wins"] == 40
-    assert np["total_games"] == 100
+    ch = np["tier_stats"]["CH"]
+    assert ch["wins"] == 40
+    assert ch["games"] == 100
+    assert ch["win_pct"] == 40.0
     assert np["tier"] == "CH"
     assert np["times_last_in_l1"] == 0
     assert "date_added" in np

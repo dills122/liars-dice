@@ -88,16 +88,16 @@ def update_leaderboard(
     for name, win_count in wins.items():
         player = data["players"].setdefault(name, {
             "date_added": now,
-            "total_wins": 0,
-            "total_games": 0,
-            "win_pct": 0.0,
-            "tier": tier,          # always the run tier; promotion loop overrides if needed
+            "tier": tier,
             "tier_since": now,
             "times_last_in_l1": 0,
+            "tier_stats": {},
         })
-        player["total_wins"] += win_count
-        player["total_games"] += n_games
-        player["win_pct"] = round(player["total_wins"] / player["total_games"] * 100, 1)
+        ts = player.setdefault("tier_stats", {})
+        ts_tier = ts.setdefault(tier, {"wins": 0, "games": 0, "win_pct": 0.0})
+        ts_tier["wins"] += win_count
+        ts_tier["games"] += n_games
+        ts_tier["win_pct"] = round(ts_tier["wins"] / ts_tier["games"] * 100, 1)
 
     # Apply immediate promotions (tier changes now)
     for name, new_tier in promotions.items():
