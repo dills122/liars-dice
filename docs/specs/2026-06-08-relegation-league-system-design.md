@@ -233,8 +233,3 @@ When two players finish with equal `win_pct` in a run, the tiebreaker is `total_
 - Multiple player files per PR
 - Player file deletion
 
----
-
-## Open Question
-
-The second design item from the review session was not captured — to be resolved before implementation begins.

@@ -1,0 +1,191 @@
+import yaml
+import pytest
+from game.components.leaderboard import (
+    apply_pending_relegation,
+    detect_phase,
+    get_tier_players,
+    update_leaderboard,
+)
+
+
+# --- apply_pending_relegation ---
+
+def test_apply_pending_moves_player_to_new_tier(lb_with_pending):
+    result = apply_pending_relegation(lb_with_pending)
+    assert result["players"]["Alice"]["tier"] == "CH"
+
+def test_apply_pending_updates_tier_since(lb_with_pending):
+    result = apply_pending_relegation(lb_with_pending)
+    assert result["players"]["Alice"]["tier_since"] != "2026-01-01T00:00:00Z"
+
+def test_apply_pending_clears_list(lb_with_pending):
+    result = apply_pending_relegation(lb_with_pending)
+    assert result["pending_relegation"] == []
+
+def test_apply_pending_empty_list_is_noop(minimal_lb):
+    result = apply_pending_relegation(minimal_lb)
+    assert result["players"]["Alice"]["tier"] == "PRM"
+    assert result["pending_relegation"] == []
+
+
+# --- detect_phase ---
+
+def test_detect_phase_1_when_below_top_n(minimal_lb):
+    assert detect_phase(minimal_lb, top_n=4) == 1
+
+def test_detect_phase_2_when_between(full_two_tier_lb):
+    # 4 total players, TOP_N=2: 4 > 2 and 4 <= 4 → phase 2
+    assert detect_phase(full_two_tier_lb, top_n=2) == 2
+
+def test_detect_phase_3_when_above_double(full_two_tier_lb):
+    # 4 total players, TOP_N=1: 4 > 2 → phase 3
+    assert detect_phase(full_two_tier_lb, top_n=1) == 3
+
+def test_detect_phase_counts_inactive():
+    data = {
+        "players": {
+            "A": {"tier": "PRM"},
+            "B": {"tier": "inactive"},
+        }
+    }
+    assert detect_phase(data, top_n=1) == 2  # 2 == 2*1, so phase 2 (inactive counted)
+
+
+# --- get_tier_players ---
+
+def test_get_tier_players_returns_correct_names(full_two_tier_lb):
+    prm = get_tier_players(full_two_tier_lb, "PRM")
+    assert set(prm) == {"Alice", "Bruno"}
+
+def test_get_tier_players_empty_when_none(minimal_lb):
+    assert get_tier_players(minimal_lb, "CH") == []
+
+def test_get_tier_players_includes_inactive():
+    data = {"players": {"X": {"tier": "inactive"}, "Y": {"tier": "PRM"}}}
+    assert get_tier_players(data, "inactive") == ["X"]
+
+
+# --- update_leaderboard ---
+
+def test_update_stats_for_competing_players(lb_file):
+    update_leaderboard(
+        wins={"Alice": 60, "Bruno": 40},
+        n_games=100,
+        tier="PRM",
+        path=lb_file,
+    )
+    with open(lb_file) as f:
+        result = yaml.safe_load(f)
+    assert result["players"]["Alice"]["total_wins"] == 100   # 40 + 60
+    assert result["players"]["Alice"]["total_games"] == 200  # 100 + 100
+    assert result["players"]["Alice"]["win_pct"] == 50.0
+
+def test_update_does_not_touch_non_competing_players(tmp_path, full_two_tier_lb):
+    import yaml as _yaml
+    path = str(tmp_path / "lb2.yaml")
+    (tmp_path / "lb2.yaml").write_text(
+        _yaml.dump(full_two_tier_lb, default_flow_style=False, sort_keys=False)
+    )
+    update_leaderboard(
+        wins={"Cleo": 70, "Diego": 30},
+        n_games=100,
+        tier="CH",
+        path=path,
+    )
+    with open(path) as f:
+        result = _yaml.safe_load(f)
+    assert result["players"]["Alice"]["total_games"] == 100  # unchanged
+
+def test_promotions_change_tier_immediately(lb_file):
+    update_leaderboard(
+        wins={"Alice": 60, "Bruno": 40},
+        n_games=100,
+        tier="PRM",
+        promotions={"Bruno": "CH"},
+        path=lb_file,
+    )
+    with open(lb_file) as f:
+        result = yaml.safe_load(f)
+    assert result["players"]["Bruno"]["tier"] == "CH"
+
+def test_pending_relegation_added_to_list(lb_file):
+    update_leaderboard(
+        wins={"Alice": 60, "Bruno": 40},
+        n_games=100,
+        tier="PRM",
+        pending_relegations=[{"player": "Bruno", "from_tier": "PRM", "to_tier": "CH"}],
+        path=lb_file,
+    )
+    with open(lb_file) as f:
+        result = yaml.safe_load(f)
+    assert len(result["pending_relegation"]) == 1
+    assert result["pending_relegation"][0]["player"] == "Bruno"
+
+def test_times_last_in_l1_incremented(lb_file):
+    update_leaderboard(
+        wins={"Alice": 60, "Bruno": 40},
+        n_games=100,
+        tier="L1",
+        last_place="Bruno",
+        path=lb_file,
+    )
+    with open(lb_file) as f:
+        result = yaml.safe_load(f)
+    assert result["players"]["Bruno"]["times_last_in_l1"] == 1
+
+def test_times_last_in_l1_not_incremented_for_other_tiers(lb_file):
+    update_leaderboard(
+        wins={"Alice": 60, "Bruno": 40},
+        n_games=100,
+        tier="PRM",
+        last_place="Bruno",
+        path=lb_file,
+    )
+    with open(lb_file) as f:
+        result = yaml.safe_load(f)
+    assert result["players"]["Bruno"]["times_last_in_l1"] == 0
+
+def test_total_runs_incremented(lb_file):
+    update_leaderboard(
+        wins={"Alice": 60, "Bruno": 40},
+        n_games=100,
+        tier="PRM",
+        path=lb_file,
+    )
+    with open(lb_file) as f:
+        result = yaml.safe_load(f)
+    assert result["total_runs"] == 3  # was 2
+
+
+def test_update_creates_new_player_with_defaults(lb_file):
+    """A player absent from the leaderboard is created with correct defaults."""
+    update_leaderboard(
+        wins={"Alice": 60, "NewPlayer": 40},
+        n_games=100,
+        tier="CH",
+        path=lb_file,
+    )
+    with open(lb_file) as f:
+        result = yaml.safe_load(f)
+    assert "NewPlayer" in result["players"]
+    np = result["players"]["NewPlayer"]
+    assert np["total_wins"] == 40
+    assert np["total_games"] == 100
+    assert np["tier"] == "CH"
+    assert np["times_last_in_l1"] == 0
+    assert "date_added" in np
+
+
+def test_apply_pending_silently_ignores_missing_player():
+    """A pending entry for a non-existent player is consumed without error."""
+    data = {
+        "pending_relegation": [
+            {"player": "Ghost", "from_tier": "PRM", "to_tier": "CH"}
+        ],
+        "players": {
+            "Alice": {"tier": "PRM", "tier_since": "2026-01-01T00:00:00Z"}
+        },
+    }
+    result = apply_pending_relegation(data)
+    assert result["pending_relegation"] == []  # consumed
+    assert result["players"]["Alice"]["tier"] == "PRM"  # unchanged
