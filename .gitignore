@@ -1,3 +1,6 @@
+# Claude Code worktrees (settings.json is committed, worktrees dir is not)
+.claude/worktrees/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
