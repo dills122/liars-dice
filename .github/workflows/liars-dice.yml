@@ -6,6 +6,9 @@ on:
     paths:
       - 'players/*'
 
+env:
+  PYTHONPATH: .
+
 jobs:
   setup:
     if: github.actor != 'github-actions[bot]'
@@ -18,6 +21,7 @@ jobs:
       challenger_tier: ${{ steps.detect.outputs.challenger_tier }}
       phase: ${{ steps.detect.outputs.phase }}
       pending_l1_relegation: ${{ steps.detect.outputs.pending_l1_relegation }}
+      already_registered: ${{ steps.detect.outputs.already_registered }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,10 +48,16 @@ jobs:
           fi
           player=$(basename "$(echo "$new_files")" .py)
           echo "challenger=$player" >> "$GITHUB_OUTPUT"
+          if python3 -c "import yaml, sys; lb = yaml.safe_load(open('leaderboard.yaml')) or {}; sys.exit(0 if '$player' in lb.get('players', {}) else 1)"; then
+            echo "Player $player is already registered — skipping game run."
+            echo "already_registered=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           python3 .github/scripts/detect_phase.py
 
   run-entry:
     needs: setup
+    if: needs.setup.outputs.already_registered != 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read

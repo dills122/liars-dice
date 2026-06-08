@@ -11,21 +11,17 @@ def minimal_lb():
         "players": {
             "Alice": {
                 "date_added": "2026-01-01T00:00:00Z",
-                "total_wins": 40,
-                "total_games": 100,
-                "win_pct": 40.0,
                 "tier": "PRM",
                 "tier_since": "2026-01-01T00:00:00Z",
                 "times_last_in_l1": 0,
+                "tier_stats": {"PRM": {"wins": 40, "games": 100, "win_pct": 40.0}},
             },
             "Bruno": {
                 "date_added": "2026-01-01T00:00:00Z",
-                "total_wins": 30,
-                "total_games": 100,
-                "win_pct": 30.0,
                 "tier": "PRM",
                 "tier_since": "2026-01-01T00:00:00Z",
                 "times_last_in_l1": 0,
+                "tier_stats": {"PRM": {"wins": 30, "games": 100, "win_pct": 30.0}},
             },
         },
     }
@@ -39,18 +35,34 @@ def full_two_tier_lb():
         "last_updated": "2026-01-01T00:00:00Z",
         "pending_relegation": [],
         "players": {
-            "Alice": {"date_added": "2026-01-01T00:00:00Z", "total_wins": 40,
-                      "total_games": 100, "win_pct": 40.0, "tier": "PRM",
-                      "tier_since": "2026-01-01T00:00:00Z", "times_last_in_l1": 0},
-            "Bruno": {"date_added": "2026-01-01T00:00:00Z", "total_wins": 30,
-                      "total_games": 100, "win_pct": 30.0, "tier": "PRM",
-                      "tier_since": "2026-01-01T00:00:00Z", "times_last_in_l1": 0},
-            "Cleo": {"date_added": "2026-01-01T00:00:00Z", "total_wins": 20,
-                     "total_games": 100, "win_pct": 20.0, "tier": "CH",
-                     "tier_since": "2026-01-01T00:00:00Z", "times_last_in_l1": 0},
-            "Diego": {"date_added": "2026-01-01T00:00:00Z", "total_wins": 10,
-                      "total_games": 100, "win_pct": 10.0, "tier": "CH",
-                      "tier_since": "2026-01-01T00:00:00Z", "times_last_in_l1": 0},
+            "Alice": {
+                "date_added": "2026-01-01T00:00:00Z",
+                "tier": "PRM",
+                "tier_since": "2026-01-01T00:00:00Z",
+                "times_last_in_l1": 0,
+                "tier_stats": {"PRM": {"wins": 40, "games": 100, "win_pct": 40.0}},
+            },
+            "Bruno": {
+                "date_added": "2026-01-01T00:00:00Z",
+                "tier": "PRM",
+                "tier_since": "2026-01-01T00:00:00Z",
+                "times_last_in_l1": 0,
+                "tier_stats": {"PRM": {"wins": 30, "games": 100, "win_pct": 30.0}},
+            },
+            "Cleo": {
+                "date_added": "2026-01-01T00:00:00Z",
+                "tier": "CH",
+                "tier_since": "2026-01-01T00:00:00Z",
+                "times_last_in_l1": 0,
+                "tier_stats": {"CH": {"wins": 20, "games": 100, "win_pct": 20.0}},
+            },
+            "Diego": {
+                "date_added": "2026-01-01T00:00:00Z",
+                "tier": "CH",
+                "tier_since": "2026-01-01T00:00:00Z",
+                "times_last_in_l1": 0,
+                "tier_stats": {"CH": {"wins": 10, "games": 100, "win_pct": 10.0}},
+            },
         },
     }
 
@@ -65,12 +77,20 @@ def lb_with_pending():
             {"player": "Alice", "from_tier": "PRM", "to_tier": "CH"}
         ],
         "players": {
-            "Alice": {"date_added": "2026-01-01T00:00:00Z", "total_wins": 40,
-                      "total_games": 100, "win_pct": 40.0, "tier": "PRM",
-                      "tier_since": "2026-01-01T00:00:00Z", "times_last_in_l1": 0},
-            "Bruno": {"date_added": "2026-01-01T00:00:00Z", "total_wins": 30,
-                      "total_games": 100, "win_pct": 30.0, "tier": "PRM",
-                      "tier_since": "2026-01-01T00:00:00Z", "times_last_in_l1": 0},
+            "Alice": {
+                "date_added": "2026-01-01T00:00:00Z",
+                "tier": "PRM",
+                "tier_since": "2026-01-01T00:00:00Z",
+                "times_last_in_l1": 0,
+                "tier_stats": {"PRM": {"wins": 40, "games": 100, "win_pct": 40.0}},
+            },
+            "Bruno": {
+                "date_added": "2026-01-01T00:00:00Z",
+                "tier": "PRM",
+                "tier_since": "2026-01-01T00:00:00Z",
+                "times_last_in_l1": 0,
+                "tier_stats": {"PRM": {"wins": 30, "games": 100, "win_pct": 30.0}},
+            },
         },
     }
 
