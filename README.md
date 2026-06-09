@@ -9,15 +9,19 @@ A Python engine for running Liar's Dice games between algorithmic players. Playe
 ### Premier
 | Player | Win% | Wins | Games |
 |--------|------|------|-------|
-| Diego  | 45.7 |  160 |   350 |
-| Alice  | 28.2 |  127 |   450 |
-| Finn   | 27.2 |   68 |   250 |
-| Bruno  | 20.0 |   90 |   450 |
+| Diego | 34.7 | 468 | 1350 |
+| Zara | 34.0 | 340 | 1000 |
+| Finn | 19.1 | 239 | 1250 |
+| Bruno | 12.7 | 184 | 1450 |
 
 ### Championship
 | Player | Win% | Wins | Games |
 |--------|------|------|-------|
-| Cleo   |  1.1 |    5 |   450 |
+| Eva | 27.2 | 272 | 1000 |
+| Sloane | 24.8 | 248 | 1000 |
+| Remy | 15.6 | 156 | 1000 |
+| Alice | 0.0 | 0 | 0 |
+| Cleo | 0.0 | 0 | 1000 |
 
 ### Level 1
 *No players currently in Level 1.*
