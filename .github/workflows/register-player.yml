@@ -14,7 +14,58 @@ env:
   PYTHONPATH: .
 
 jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: uv sync --no-install-project
+
+      - name: Validate player can be imported and instantiated
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          git fetch origin main
+
+          # Skip non-player PRs (same guard as register job)
+          all_changed=$(git diff --name-only origin/main...HEAD || true)
+          non_player=$(echo "$all_changed" | grep -v '^players/' || true)
+          if [ -n "$non_player" ]; then
+            echo "PR touches non-player files — skipping validation."
+            exit 0
+          fi
+
+          # Only validate added/modified files; deletions don't need an import check
+          changed=$(git diff --name-only --diff-filter=AM origin/main...HEAD -- 'players/*.py' || true)
+          if [ -z "$changed" ]; then
+            echo "No player files added or modified — skipping validation."
+            exit 0
+          fi
+
+          while IFS= read -r player_file; do
+            [ -z "$player_file" ] && continue
+            if ! output=$(uv run python -m game.validate "$player_file" 2>&1); then
+              echo "$output"
+              gh pr comment "$PR_NUMBER" --body "❌ Player file cannot be loaded — fix these errors before the PR can be merged:\`\`\`${output}\`\`\`"
+              exit 1
+            fi
+            echo "$output"
+          done <<< "$changed"
+
   register:
+    needs: validate
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:

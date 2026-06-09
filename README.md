@@ -25,7 +25,7 @@ A Python engine for running Liar's Dice games between algorithmic players. Playe
 <!-- leaderboard-end -->
 <!-- prettier-ignore-end -->
 
-_Updated daily at 4am EST. Full history in the [season tracking issue](#)._
+_Updated daily at 4am EST. Full history in the [season tracking issue](https://github.com/after2400/liars-dice/issues/4)._
 
 ---
 
@@ -42,7 +42,7 @@ Two workflows replace the old per-PR game model:
 
 **`run-season.yml`** — runs daily at 4am EST (`0 9 * * *` UTC)
 
-- Plays `N_GAMES` (default 250) games in each active tier, bottom-up: `inactive → L1 → CH → PRM`
+- Plays `N_GAMES` (default 1000) games in each active tier, bottom-up: `inactive → L1 → CH → PRM`
 - Promotions and relegations are applied between tiers (so a player promoted from L1 can compete in CH the same day)
 - Commits the updated leaderboard and posts a summary to the season tracking issue
 
@@ -186,12 +186,26 @@ uv run python -m game [N_GAMES] [TOP_N] [--tier TIER]
 Examples:
 
 ```bash
-uv run python -m game              # 1 game, all registered players
-uv run python -m game 100 4        # 100 games, top 4 players
+uv run python -m game              # 1 game, every player file in players/
+uv run python -m game 100 4        # 100 games, all players
 uv run python -m game 50 4 --tier PRM   # 50 games, PRM players only
 ```
 
-Console shows one result line per game followed by a summary table. Full debug logs are written to `gamelog.log`.
+**Testing a new player before submitting a PR:** drop your `.py` file in `players/` and run without `--tier`. Every file in the directory is included regardless of leaderboard status, so your player competes immediately against the full field:
+
+```bash
+uv run python -m game 1000 --no-game-results
+```
+
+`--no-game-results` suppresses the per-game lines and shows only the final summary table. Full debug logs are written to `gamelog.log`.
+
+**Validating a player file before submitting:**
+
+```bash
+uv run python -m game.validate players/fred.py
+```
+
+Exits 0 if the file imports and instantiates cleanly; exits 1 with an error message otherwise. The same check runs automatically in CI when you open a PR.
 
 ---
 
@@ -200,6 +214,7 @@ Console shows one result line per game followed by a summary table. Full debug l
 ```
 game/
   __main__.py          # entry point, logging, player selection, --tier filter
+  validate.py          # player file validator (python -m game.validate <file>)
   components/
     script.py          # game loop and round orchestration
     bets.py            # Bet class, bet_validator, bet_grader

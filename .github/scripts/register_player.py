@@ -4,7 +4,6 @@
 Environment variables:
   PLAYER_FILE       path to the player .py file (e.g. players/fred.py)
   GITHUB_USERNAME   the PR author's GitHub login (github.actor)
-  TOP_N             league capacity per tier (int, default 4)
 
 Exits 0 on success, 1 on validation failure.
 Prints "entry_tier=<tier>" to stdout for the workflow to capture.
@@ -39,23 +38,21 @@ def _save_lb(data):
         yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
 
-def _detect_entry_tier(lb: dict, top_n: int) -> str:
+def _detect_entry_tier(lb: dict) -> str:
     players = lb.get("players", {})
     l1_count = sum(1 for p in players.values() if p.get("tier") == "L1")
     ch_count = sum(1 for p in players.values() if p.get("tier") == "CH")
 
-    if l1_count >= 1 and l1_count < top_n * 2:
+    if l1_count >= 1:
         return "L1"
-    if ch_count >= 1 and ch_count < top_n:
+    if ch_count >= 1:
         return "CH"
-    return "PRM"
+    return "CH"
 
 
 def main():
     player_file = os.environ["PLAYER_FILE"]
     github_username = os.environ["GITHUB_USERNAME"]
-    top_n = int(os.environ.get("TOP_N", "4"))
-
     module_name = Path(player_file).stem  # e.g. "fred" from "players/fred.py"
 
     # Ensure the repo root (cwd) is on sys.path so player files can import 'game'
@@ -108,7 +105,7 @@ def main():
         print(f"entry_tier={players[class_name]['tier']}")
         return
 
-    entry_tier = _detect_entry_tier(lb, top_n)
+    entry_tier = _detect_entry_tier(lb)
     now = _now()
     players[class_name] = {
         "display_name": display_name,

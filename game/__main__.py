@@ -18,10 +18,17 @@ def _parse_args():
         help="Run only players in this tier",
     )
     p.add_argument("--results-file", default=None, help="Write wins dict as JSON to this path")
+    p.add_argument(
+        "--no-game-results",
+        action="store_true",
+        help="Suppress per-game result lines; show only the final summary table",
+    )
     p.add_argument("n_games", type=int, nargs="?", default=1)
     p.add_argument("top_n", type=int, nargs="?", default=4)
     return p.parse_args()
 
+
+args = _parse_args()
 
 # --- Logging setup ---
 
@@ -54,6 +61,10 @@ console_handler.setFormatter(_GameFormatter())
 console_handler.addFilter(_SeriesConsoleFilter())
 logging.basicConfig(level=logging.DEBUG, handlers=[file_handler, console_handler])
 
+# Suppress per-game lines when --no-game-results is set
+if args.no_game_results:
+    console_handler.setLevel(logging.WARNING)
+
 # --- Imports after logging setup ---
 
 from game.components.series import format_results, run_series  # noqa: E402
@@ -61,7 +72,6 @@ from game.components.utils import import_player_classes_from_dir  # noqa: E402
 
 # --- Main ---
 
-args = _parse_args()
 N_GAMES = args.n_games
 TOP_N = args.top_n
 
@@ -87,14 +97,15 @@ if args.tier:
             p for p in all_players if _lb_players.get(type(p).__name__, {}).get("tier") == args.tier
         ]
 else:
-    # Local run with no tier filter: include all known players
-    players = [p for p in all_players if type(p).__name__ in _lb_players] or all_players
+    # No tier filter: run everyone in the players/ directory
+    players = all_players
 
 if len(players) < 2:
     print(f"[skip] Only {len(players)} player(s) in --tier {args.tier} — no game run.")
     raise SystemExit(0)
 
-print(f"Playing: {[type(p).__name__ for p in players]}")
+if not args.no_game_results:
+    print(f"Playing: {[type(p).__name__ for p in players]}")
 
 wins = run_series(players, N_GAMES)
 print(format_results(wins, N_GAMES))

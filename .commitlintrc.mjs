@@ -6,14 +6,13 @@ export default {
       2,
       "always",
       [
-        "ci",         // GitHub Actions workflows
-        "docs",       // README and documentation
-        "config",     // commitlint, ruff, pre-commit config
-        "game",       // core game engine (game/)
-        "players",    // player files (players/)
+        "config", // commitlint, ruff, pre-commit config
+        "workflows", // .github/workflows/
+        "game", // core game engine (game/)
+        "players", // player files (players/)
         "leaderboard", // leaderboard schema and data
-        "scripts",    // .github/scripts/
-        "tests",      // test-only changes
+        "scripts", // .github/scripts/
+        "tests", // test-only changes
       ],
     ],
     "scope-empty": [1, "never"], // warn if no scope provided

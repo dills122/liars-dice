@@ -203,28 +203,37 @@ def test_no_leaderboard_update_written(tmp_path):
 
 def test_class_name_used_as_leaderboard_key(tmp_path):
     """Game results dict uses class name (type(p).__name__), not p.name attribute."""
+    from game.components.utils import import_player_classes_from_dir
+
+    now = "2026-01-01T00:00:00Z"
+
+    # Register every player file so none appears as "unregistered" (which would pull
+    # them into --tier PRM). Alice and Bruno go in PRM; everyone else in inactive.
+    all_names = {
+        type(p).__name__ for p in import_player_classes_from_dir(str(REPO_ROOT / "players"))
+    }
+
+    def _entry(tier, stats=None):
+        return {
+            "display_name": "",
+            "github_username": "",
+            "tier": tier,
+            "date_added": now,
+            "tier_since": now,
+            "times_inactive": 0,
+            "tier_stats": stats or {},
+        }
+
     lb = {
         "total_runs": 1,
         "players": {
-            "Alice": {
-                "display_name": "Alice",
-                "github_username": "",
-                "tier": "PRM",
-                "date_added": "2026-01-01T00:00:00Z",
-                "tier_since": "2026-01-01T00:00:00Z",
-                "times_inactive": 0,
-                "tier_stats": {"PRM": {"wins": 40, "games": 100, "win_pct": 40.0}},
-            },
-            "Bruno": {
-                "display_name": "Bruno",
-                "github_username": "",
-                "tier": "PRM",
-                "date_added": "2026-01-01T00:00:00Z",
-                "tier_since": "2026-01-01T00:00:00Z",
-                "times_inactive": 0,
-                "tier_stats": {"PRM": {"wins": 30, "games": 100, "win_pct": 30.0}},
-            },
+            name: _entry("PRM", {"PRM": {"wins": 40, "games": 100, "win_pct": 40.0}})
+            if name == "Alice"
+            else _entry("PRM", {"PRM": {"wins": 30, "games": 100, "win_pct": 30.0}})
+            if name == "Bruno"
+            else _entry("inactive")
+            for name in all_names
         },
     }
-    results = run_game(["5", "4"], lb, tmp_path)
+    results = run_game(["5", "4", "--tier", "PRM"], lb, tmp_path)
     assert set(results.keys()) == {"Alice", "Bruno"}
