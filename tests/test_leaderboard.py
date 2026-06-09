@@ -460,3 +460,43 @@ def test_apply_season_results_relegates_bottom_even_when_promotion_restores_capa
     assert result["players"]["P2"]["tier"] == "CH"
     assert result["players"]["P3"]["tier"] == "CH"
     assert result["players"]["P4"]["tier"] == "CH"
+
+
+def test_apply_season_results_no_relegation_when_tier_below_capacity(tmp_path):
+    """L1 (or any thin tier) does not force a relegation when started below capacity."""
+    import yaml as _yaml
+
+    from game.components.leaderboard import apply_season_results
+
+    def _player(tier):
+        return {
+            "display_name": "",
+            "github_username": "",
+            "tier": tier,
+            "tier_since": "2026-01-01T00:00:00Z",
+            "date_added": "2026-01-01T00:00:00Z",
+            "times_inactive": 0,
+            "tier_stats": {},
+        }
+
+    # top_n=4, so L1 capacity=8. Only 2 players — well below capacity.
+    lb = {
+        "total_runs": 1,
+        "players": {"P1": _player("L1"), "P2": _player("L1")},
+        "last_updated": "2026-01-01T00:00:00Z",
+    }
+    path = str(tmp_path / "lb.yaml")
+    (tmp_path / "lb.yaml").write_text(_yaml.dump(lb))
+
+    apply_season_results(
+        wins={"P1": 70, "P2": 30},
+        n_games=100,
+        tier="L1",
+        top_n=4,
+        path=path,
+    )
+    with open(path) as f:
+        result = _yaml.safe_load(f)
+
+    assert result["players"]["P1"]["tier"] == "CH"  # top promotes
+    assert result["players"]["P2"]["tier"] == "L1"  # stays — L1 is below capacity, no relegation
