@@ -81,7 +81,7 @@ jobs:
 
       - name: Validate and queue merge
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.LEADERBOARD_PAT }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           ACTOR: ${{ github.actor }}
           REPOSITORY: ${{ github.repository }}
