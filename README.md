@@ -30,7 +30,7 @@ A Python engine for running Liar's Dice games between algorithmic players. Playe
 <!-- leaderboard-end -->
 <!-- prettier-ignore-end -->
 
-_Updated daily at 4am EST. Full history in the [season tracking issue](https://github.com/after2400/liars-dice/issues/4)._
+_Updated daily at 9am UTC. Full history in the [season tracking issue](https://github.com/after2400/liars-dice/issues/4)._
 
 ---
 
@@ -45,7 +45,7 @@ Two workflows replace the old per-PR game model:
 - Commits the leaderboard update and auto-merges the PR
 - No games run immediately
 
-**`run-season.yml`** — runs daily at 4am EST (`0 9 * * *` UTC)
+**`run-season.yml`** — runs daily at 9am UTC (`0 9 * * *`)
 
 - Plays `N_GAMES` (default 1000) games in each active tier, bottom-up: `inactive → L1 → CH → PRM`
 - Promotions and relegations are applied between tiers (so a player promoted from L1 can compete in CH the same day)

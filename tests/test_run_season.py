@@ -144,8 +144,13 @@ def test_writes_summary_file(tmp_path):
     # Must have a top-level heading
     assert summary.startswith("# Season Summary"), f"Unexpected start:\n{summary[:200]}"
 
-    # Must contain PRM section
-    assert "## PRM" in summary, "Missing PRM section in summary"
+    # Must contain final standings and game results sections
+    assert "## Final Standings" in summary, "Missing Final Standings section"
+    assert "## Game Results" in summary, "Missing Game Results section"
+
+    # PRM appears as subsection in standings and as a collapsed game results block
+    assert "### Premier" in summary, "Missing Premier subsection in standings"
+    assert "<summary>Premier" in summary, "Missing Premier game results details block"
 
     # Must contain a markdown table
     assert "| Player" in summary or "|Player" in summary, "No table header found"

@@ -144,56 +144,82 @@ def _write_summary(
     n_games: int,
     lb_path: str,
 ) -> None:
-    """Write a markdown season summary."""
+    """Write a markdown season summary: final standings + collapsed per-tier game results."""
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     data = _load_lb(lb_path)
     players = data.get("players", {})
 
     lines: list[str] = [f"# Season Summary — {today}", ""]
 
-    tier_display_order = ["PRM", "CH", "L1", "inactive"]
+    # --- Final standings (post-run leaderboard state, mirrors README) ---
+    lines.append("## Final Standings")
+    lines.append("")
 
-    for tier in tier_display_order:
-        if tier in skipped:
-            continue
-        wins = tier_results.get(tier)
-        if wins is None:
-            continue
-
-        lines.append(f"## {tier}")
-        lines.append("")
-        lines.append("| Player | Wins | Games | Win% |")
-        lines.append("|--------|------|-------|------|")
-
-        # Sort by wins descending
-        for class_name, win_count in sorted(wins.items(), key=lambda x: -x[1]):
-            p = players.get(class_name, {})
-            display = p.get("display_name", class_name)
-            ts = p.get("tier_stats", {}).get(tier, {})
-            total_games = ts.get("games", n_games)
-            total_wins = ts.get("wins", win_count)
-            win_pct = ts.get("win_pct", round(win_count / n_games * 100, 1) if n_games else 0.0)
-            lines.append(f"| {display} | {total_wins} | {total_games} | {win_pct} |")
-
+    for tier in ("PRM", "CH", "L1"):
+        label = _TIER_LABEL[tier]
+        tier_players = [(n, p) for n, p in players.items() if p.get("tier") == tier]
+        tier_players.sort(
+            key=lambda x: -x[1].get("tier_stats", {}).get(tier, {}).get("win_pct", 0.0)
+        )
+        lines.append(f"### {label}")
+        if tier_players:
+            lines.extend(_standings_table(tier_players, tier))
+        else:
+            lines.append(f"*No players currently in {label}.*")
         lines.append("")
 
-        # Show promotions/relegations that resulted from this tier
-        for class_name in wins:
-            p = players.get(class_name, {})
-            current_tier = p.get("tier", tier)
-            display = p.get("display_name", class_name)
-            if current_tier != tier:
-                direction = (
-                    "Promoted" if _tier_rank(current_tier) > _tier_rank(tier) else "Relegated"
-                )
-                lines.append(f"{direction}: {display} → {current_tier}")
-
+    inactive_players = [(n, p) for n, p in players.items() if p.get("tier") == "inactive"]
+    if inactive_players:
+        names = ", ".join(p.get("display_name", n) for n, p in inactive_players)
+        lines.append(f"*Inactive: {names}*")
         lines.append("")
 
-    # Skipped tiers footer
+    # --- Per-tier game results (collapsed) ---
+    ran_tiers = [t for t in ("PRM", "CH", "L1", "inactive") if t in tier_results]
+    if ran_tiers:
+        lines.append("---")
+        lines.append("")
+        lines.append("## Game Results")
+        lines.append("")
+
+        for tier in ran_tiers:
+            wins = tier_results[tier]
+            label = _TIER_LABEL.get(tier, tier)
+            lines.append("<details>")
+            lines.append(f"<summary>{label} — {n_games} games</summary>")
+            lines.append("")
+            lines.append("| Player | Wins | Win % |")
+            lines.append("|--------|------|-------|")
+
+            for class_name, win_count in sorted(wins.items(), key=lambda x: -x[1]):
+                p = players.get(class_name, {})
+                display = p.get("display_name", class_name)
+                win_pct = round(win_count / n_games * 100, 1) if n_games else 0.0
+                lines.append(f"| {display} | {win_count} | {win_pct}% |")
+
+            lines.append("")
+
+            movements = []
+            for class_name in wins:
+                p = players.get(class_name, {})
+                current_tier = p.get("tier", tier)
+                display = p.get("display_name", class_name)
+                if current_tier != tier:
+                    direction = (
+                        "Promoted" if _tier_rank(current_tier) > _tier_rank(tier) else "Relegated"
+                    )
+                    movements.append(f"{direction}: {display} → {current_tier}")
+            for m in movements:
+                lines.append(m)
+            if movements:
+                lines.append("")
+
+            lines.append("</details>")
+            lines.append("")
+
     if skipped:
         skipped_str = ", ".join(f"{t} (< 2 players)" for t in skipped)
-        lines.append(f"## Skipped tiers: {skipped_str}")
+        lines.append(f"*Skipped: {skipped_str}*")
         lines.append("")
 
     with open(summary_file, "w") as f:
