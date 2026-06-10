@@ -237,3 +237,51 @@ def test_class_name_used_as_leaderboard_key(tmp_path):
     }
     results = run_game(["5", "4", "--tier", "PRM"], lb, tmp_path)
     assert set(results.keys()) == {"Alice", "Bruno"}
+
+
+def test_stats_passed_to_six_arg_player(tmp_path):
+    """A player declaring a 6th arg receives a non-None GameStats instance."""
+    import textwrap
+
+    from game.components.series import run_series
+    from game.components.stats import GameStats
+    from game.components.utils import import_player_classes_from_dir
+
+    player_src = textwrap.dedent("""
+        from game.components.bets import Bet
+
+        class Spy:
+            name = "Spy"
+            received_stats = []
+            def algo(self, hand, prior_bet, total_dice, bet_history, outcomes, stats=None):
+                Spy.received_stats.append(stats)
+                if prior_bet is None:
+                    return Bet(1, 2, self.name)
+                return None
+    """)
+
+    player_dir = tmp_path / "players"
+    player_dir.mkdir()
+    (player_dir / "spy.py").write_text(player_src)
+    (player_dir / "__init__.py").write_text("")
+
+    players = import_player_classes_from_dir(str(player_dir))
+    assert len(players) == 1
+
+    class AlwaysBid:
+        name = "AlwaysBid"
+
+        def algo(self, hand, prior_bet, total_dice, bet_history, outcomes):
+            from game.components.bets import Bet
+
+            if prior_bet is None:
+                return Bet(1, 2, self.name)
+            return Bet(prior_bet.quantity + 1, prior_bet.face, self.name)
+
+    run_series(players + [AlwaysBid()], n_games=1)
+
+    spy_cls = players[0].__class__
+    assert len(spy_cls.received_stats) > 0, "Spy.algo was never called"
+    assert all(isinstance(s, GameStats) for s in spy_cls.received_stats), (
+        f"Expected GameStats on every call, got: {spy_cls.received_stats}"
+    )
