@@ -17,7 +17,12 @@ def build_display_names(players: dict) -> dict[str, str]:
     colliding group; otherwise it falls back to the class name, which is always
     unique. Unique names render bare.
     """
-    names = {cn: p.get("display_name", cn) for cn, p in players.items()}
+    _ctrl = str.maketrans("", "", "".join(chr(i) for i in range(32)))
+
+    def _clean(s: str) -> str:
+        return s.translate(_ctrl).strip()
+
+    names = {cn: _clean(p.get("display_name", cn)) for cn, p in players.items()}
 
     groups: dict[str, list[str]] = defaultdict(list)
     for cn, name in names.items():
@@ -48,6 +53,32 @@ def get_tier_players(data: dict, tier: str) -> list[str]:
 
 _TIER_ABOVE = {"L1": "CH", "CH": "PRM", "inactive": "L1"}
 _TIER_BELOW = {"PRM": "CH", "CH": "L1", "L1": "inactive"}
+
+
+def tier_capacities(n_players: int) -> dict[str, int]:
+    """Return target capacity per tier for n_players total registered players."""
+    if n_players <= 24:
+        return {"PRM": 4, "CH": 4, "L1": max(0, n_players - 8), "DED": 0}
+    if n_players <= 32:
+        pairs = (n_players - 24) // 2
+        extra = (n_players - 24) % 2
+        return {"PRM": 4 + pairs, "CH": 4 + pairs, "L1": 16 + extra, "DED": 0}
+    return {"PRM": 8, "CH": 8, "L1": 16, "DED": n_players - 32}
+
+
+def detect_entry_tier(lb: dict) -> str:
+    """Return the lowest-prestige tier with capacity for the next registered player."""
+    players = lb.get("players", {})
+    n_after = len(players) + 1
+    caps = tier_capacities(n_after)
+    counts: dict[str, int] = {}
+    for p in players.values():
+        t = p.get("tier", "")
+        counts[t] = counts.get(t, 0) + 1
+    for tier in ("L1", "CH", "PRM", "DED"):
+        if caps.get(tier, 0) > 0 and counts.get(tier, 0) < caps[tier]:
+            return tier
+    return "DED"
 
 
 def _TIER_CAPACITY(tier: str, top_n: int) -> float:

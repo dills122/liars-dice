@@ -34,6 +34,8 @@ if _repo_root_str not in sys.path:
 
 import yaml  # noqa: E402
 
+_DRY_RUN = os.environ.get("DRY_RUN", "").lower() in ("1", "true", "yes")
+
 
 def _load_lb(path: str) -> dict:
     if os.path.exists(path):
@@ -143,6 +145,8 @@ def run_season(
     print(f"[done] Season summary written to {summary_file}")
     _update_readme(readme_path, lb_path)
     print("[done] README standings updated.")
+    _post_season_from_lb(lb_path, summary_file)
+    print("[done] Season summary posted to tracking issue.")
 
 
 def _write_summary(
@@ -181,7 +185,11 @@ def _write_summary(
 
     inactive_players = [(n, p) for n, p in players.items() if p.get("tier") == "inactive"]
     if inactive_players:
-        names = ", ".join(display_names.get(n, n) for n, _ in inactive_players)
+
+        def _q(s: str) -> str:
+            return f'"{s}"' if "," in s else s
+
+        names = ", ".join(_q(display_names.get(n, n)) for n, _ in inactive_players)
         lines.append(f"*Inactive: {names}*")
         lines.append("")
 
@@ -322,6 +330,33 @@ def _update_readme(readme_path: str, lb_path: str) -> None:
     updated = content[:start_idx] + block + content[end_idx + len(_README_END) :]
     with open(readme_path, "w") as f:
         f.write(updated)
+
+
+def _post_season_summary(issue_number: int, summary_file: str) -> None:
+    """Post the season summary markdown to the given GitHub issue."""
+    if _DRY_RUN:
+        print(f"[dry-run] would post summary to issue #{issue_number}")
+        return
+    result = subprocess.run(
+        ["gh", "issue", "comment", str(issue_number), "--body-file", summary_file],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        print(f"[warn] gh issue comment failed: {result.stderr}", file=sys.stderr)
+
+
+def _post_season_from_lb(lb_path: str, summary_file: str) -> None:
+    """Read current_season_issue from leaderboard.yaml and post the summary."""
+    data = _load_lb(lb_path)
+    issue_number = data.get("current_season_issue")
+    if issue_number is None:
+        print(
+            "[warn] current_season_issue not set in leaderboard.yaml — skipping post",
+            file=sys.stderr,
+        )
+        return
+    _post_season_summary(int(issue_number), summary_file)
 
 
 def main() -> None:
