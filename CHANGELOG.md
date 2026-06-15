@@ -1,6 +1,20 @@
 # CHANGELOG
 
 
+## v1.0.2 (2026-06-15)
+
+### Bug Fixes
+
+- Dry-run README guard, uv.lock PSR sync, and CLAUDE.md overhaul
+  ([#33](https://github.com/after2400/liars-dice/pull/33),
+  [`809e02b`](https://github.com/after2400/liars-dice/commit/809e02bd41ce09f3fd668dd985adf6b6f8175dd8))
+
+### Chores
+
+- Remove wrkflw from just develop ([#32](https://github.com/after2400/liars-dice/pull/32),
+  [`1dbf96c`](https://github.com/after2400/liars-dice/commit/1dbf96ced55dbba4cf8cd79bd54b412a833da546))
+
+
 ## v1.0.1 (2026-06-14)
 
 ### Bug Fixes
