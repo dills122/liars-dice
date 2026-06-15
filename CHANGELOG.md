@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v1.2.0 (2026-06-15)
+
+### Features
+
+- **game**: Pass tier to algo as opt-in parameter
+  ([#35](https://github.com/after2400/liars-dice/pull/35),
+  [`7c12b36`](https://github.com/after2400/liars-dice/commit/7c12b369aab1d241125b4c58c2bab8b220185034))
+
+
 ## v1.1.0 (2026-06-15)
 
 ### Features
