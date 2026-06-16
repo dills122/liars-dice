@@ -15,8 +15,9 @@ Run `just develop` once after cloning to install remaining tools and activate pr
 Open a PR that adds a single `.py` file to `players/`. The file must:
 
 1. Be named after the class it contains — `fred.py` must define `class Fred`
-2. Implement the `algo` method (see [Player API](#player-api) below)
-3. Optionally set a `name` attribute (display name, ≤ 25 chars, no parentheses)
+2. Have a class name unique across the league — CI rejects duplicates (`Fred` already exists? try `Fred_<username>`)
+3. Implement the `algo` method (see [Player API](#player-api) below)
+4. Optionally set a `name` attribute (display name, ≤ 25 chars, no parentheses)
 
 ```python
 from game.components.bets import Bet
@@ -43,6 +44,8 @@ The PR is validated and auto-merged. Your player competes starting from the next
 **Modifying your player:** open a PR that modifies your existing file. The workflow verifies authorship (your `github_username` in the leaderboard must match the PR author) and auto-merges.
 
 **Removing your player:** open a PR that deletes your file. Self-removals are auto-merged; admins can batch-delete multiple players.
+
+> **PR rules (enforced by CI):** Each PR must touch only files under `players/` and add or modify exactly one file. PRs that touch other paths are silently skipped; PRs with multiple player files are rejected with an error comment.
 
 ---
 
@@ -87,8 +90,10 @@ bet.player    # str — name of the player who placed it
 ### `bet_history` entries
 
 ```python
-{"game": int, "round": int, "player": str, "bet": Bet}
+{"game": int, "round": int, "player": str, "bet": Bet, "dice_count": int}
 ```
+
+`dice_count` is the bidder's die count at the moment they placed that bid.
 
 ### `outcomes` entries
 
@@ -127,8 +132,14 @@ just lint     # ruff check + format check
 
 ```bash
 just simulate-season               # dry run with today's date
-just simulate-season 2026-07-07    # dry run with a specific date
+just simulate-season 2026-07-13    # dry run with a specific Monday date
 just simulate-tournament           # dry run the next quarterly tournament
+
+# Full quarter — runs tournament + all Mondays in sequence, writes sim-YYYY-QN.md
+uv run python -m game.simulation.quarter
+# --start 2026-07-06   tournament Monday to start from (default: next upcoming)
+# --n-games 500        games per tier per run (default: 1000)
+
 just clean                         # reset leaderboard.yaml and season_summary.md afterward
 ```
 
