@@ -17,6 +17,7 @@ ignore = ["E501"]                # line length handled by formatter
 
 [tool.pytest.ini_options]
 testpaths = ["player_tests"]
+pythonpath = ["."]
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
