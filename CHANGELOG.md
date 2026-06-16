@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v1.4.1 (2026-06-16)
+
+### Bug Fixes
+
+- **workflows**: Dispatch season run when new player added on non-Monday
+  ([#47](https://github.com/after2400/liars-dice/pull/47),
+  [`6379e22`](https://github.com/after2400/liars-dice/commit/6379e228ddcda030e90a43ffebc4619b5fb85381))
+
+
 ## v1.4.0 (2026-06-16)
 
 ### Chores
