@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v1.3.0 (2026-06-16)
+
+### Continuous Integration
+
+- Block mixed player/non-player PRs for all contributors
+  ([`ba95496`](https://github.com/after2400/liars-dice/commit/ba95496d441c2aa61132ab1bc457b664f5c21af3))
+
+### Features
+
+- **game**: Add dice_count to bet_history entries
+  ([`0ebc0e6`](https://github.com/after2400/liars-dice/commit/0ebc0e6d7529851de60d360651669a9f81fe978e))
+
+
 ## v1.2.0 (2026-06-15)
 
 ### Features
