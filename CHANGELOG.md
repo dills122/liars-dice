@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v1.4.7 (2026-06-18)
+
+### Bug Fixes
+
+- **scripts**: Add time to season summary heading
+  ([#68](https://github.com/after2400/liars-dice/pull/68),
+  [`8016cce`](https://github.com/after2400/liars-dice/commit/8016ccede7f1971abc494ec56d69f4695943cedc))
+
+### Chores
+
+- **leaderboard**: Attribute Alice, Bruno, Cleo, Diego to zachaustin01
+  ([#65](https://github.com/after2400/liars-dice/pull/65),
+  [`0eff6bf`](https://github.com/after2400/liars-dice/commit/0eff6bfed30c862ade5359f65c8630bb89629822))
+
+
 ## v1.4.6 (2026-06-18)
 
 ### Bug Fixes
