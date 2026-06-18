@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v1.4.4 (2026-06-18)
+
+### Documentation
+
+- Migrate player docs to wiki, trim CONTRIBUTING.md
+  ([#57](https://github.com/after2400/liars-dice/pull/57),
+  [`c25d4b0`](https://github.com/after2400/liars-dice/commit/c25d4b00a313e3b96f9c396a1cba5f1da7123340))
+
+### Performance Improvements
+
+- **game**: Isolate algo() inputs from shared game state
+  ([#62](https://github.com/after2400/liars-dice/pull/62),
+  [`56d0850`](https://github.com/after2400/liars-dice/commit/56d085055c53171566f1da974f02f0c3efe094a8))
+
+
 ## v1.4.3 (2026-06-17)
 
 ### Bug Fixes
