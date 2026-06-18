@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v1.4.8 (2026-06-18)
+
+### Bug Fixes
+
+- **workflows**: Serialize concurrent workflow runs
+  ([#67](https://github.com/after2400/liars-dice/pull/67),
+  [`a25962c`](https://github.com/after2400/liars-dice/commit/a25962ce8f5b1cd5c62282ba50b0080d4984a58f))
+
+
 ## v1.4.7 (2026-06-18)
 
 ### Bug Fixes
