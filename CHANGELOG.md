@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.4.6 (2026-06-18)
+
+### Bug Fixes
+
+- **game**: Phase 3 operational hardening ([#64](https://github.com/after2400/liars-dice/pull/64),
+  [`1297d9c`](https://github.com/after2400/liars-dice/commit/1297d9c9c8d9a52d899816da99cb435cf2f48b87))
+
+
 ## v1.4.5 (2026-06-18)
 
 ### Bug Fixes
