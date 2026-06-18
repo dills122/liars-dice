@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v1.5.0 (2026-06-18)
+
+### Features
+
+- **workflows**: Trigger season run automatically after new player registers
+  ([#69](https://github.com/after2400/liars-dice/pull/69),
+  [`d3bfbce`](https://github.com/after2400/liars-dice/commit/d3bfbce0b7609cb0ee58d03214ca95ad477fdc61))
+
+
 ## v1.4.8 (2026-06-18)
 
 ### Bug Fixes
