@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v1.4.5 (2026-06-18)
+
+### Bug Fixes
+
+- **game**: Replace exec_module() with AST-based player validator
+  ([#63](https://github.com/after2400/liars-dice/pull/63),
+  [`062ee54`](https://github.com/after2400/liars-dice/commit/062ee54a4a346219965015311328d43719a9591c))
+
+
 ## v1.4.4 (2026-06-18)
 
 ### Documentation
