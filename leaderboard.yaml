@@ -1,5 +1,5 @@
 total_runs: 21
-last_updated: '2026-06-17T21:58:43Z'
+last_updated: '2026-06-18T01:30:55Z'
 current_season_issue: 4
 players:
   Alice:
@@ -208,5 +208,13 @@ players:
     date_added: '2026-06-17T21:58:43Z'
     tier: L1
     tier_since: '2026-06-17T21:58:43Z'
+    times_inactive: 0
+    tier_stats: {}
+  HonestAbe:
+    display_name: Honest Abe
+    github_username: DNiev
+    date_added: '2026-06-18T01:30:55Z'
+    tier: L1
+    tier_since: '2026-06-18T01:30:55Z'
     times_inactive: 0
     tier_stats: {}
