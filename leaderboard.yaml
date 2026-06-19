@@ -1,5 +1,5 @@
 total_runs: 39
-last_updated: '2026-06-18T23:31:36Z'
+last_updated: '2026-06-19T12:30:06Z'
 current_season_issue: 4
 players:
   Alice:
@@ -290,3 +290,11 @@ players:
         wins: 215
         games: 1000
         win_pct: 21.5
+  PeterBeter:
+    display_name: Peter Beter
+    github_username: DNiev
+    date_added: '2026-06-19T12:30:06Z'
+    tier: CH
+    tier_since: '2026-06-19T12:30:06Z'
+    times_inactive: 0
+    tier_stats: {}
