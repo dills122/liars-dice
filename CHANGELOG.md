@@ -1,6 +1,35 @@
 # CHANGELOG
 
 
+## v1.9.0 (2026-06-19)
+
+### Continuous Integration
+
+- **workflows**: Add workflow_dispatch to sync-wiki for manual triggers
+  ([#91](https://github.com/after2400/liars-dice/pull/91),
+  [`c36c450`](https://github.com/after2400/liars-dice/commit/c36c450c500a615ca4926c32b5632ef0bcfd8447))
+
+- **workflows**: Auto-update player PR branches when main advances
+  ([#93](https://github.com/after2400/liars-dice/pull/93),
+  [`cd43d3c`](https://github.com/after2400/liars-dice/commit/cd43d3cda48b9f2fc8aefab5c74f467f9b53d852))
+
+- **workflows**: Grant contents: write so GITHUB_TOKEN can push to wiki
+  ([#90](https://github.com/after2400/liars-dice/pull/90),
+  [`b52bd81`](https://github.com/after2400/liars-dice/commit/b52bd81a4ea36ccf9004e4391bfbc268ddea8081))
+
+### Documentation
+
+- Add local simulation workflow to Player Guide wiki
+  ([#88](https://github.com/after2400/liars-dice/pull/88),
+  [`5e758f1`](https://github.com/after2400/liars-dice/commit/5e758f1796c5464dc04da04f7ce44aa8e187c15c))
+
+### Features
+
+- **game**: Add step counter, elapsed time, and generated-at timestamp to quarter sim
+  ([#94](https://github.com/after2400/liars-dice/pull/94),
+  [`46c24c7`](https://github.com/after2400/liars-dice/commit/46c24c7ded452206ccef16d478c71b4e60f86220))
+
+
 ## v1.8.0 (2026-06-19)
 
 ### Documentation
