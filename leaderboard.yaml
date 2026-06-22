@@ -1,5 +1,5 @@
 total_runs: 57
-last_updated: '2026-06-22T14:34:11Z'
+last_updated: '2026-06-22T20:35:12Z'
 current_season_issue: 4
 players:
   Alice:
@@ -318,3 +318,11 @@ players:
         wins: 716
         games: 4000
         win_pct: 17.9
+  EvilStewie:
+    display_name: EvilStewie
+    github_username: zachaustin01
+    date_added: '2026-06-22T20:35:12Z'
+    tier: CH
+    tier_since: '2026-06-22T20:35:12Z'
+    times_inactive: 0
+    tier_stats: {}
