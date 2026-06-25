@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v1.12.2 (2026-06-25)
+
+### Bug Fixes
+
+- **engine**: Enter new players at lowest existing tier regardless of occupancy
+  ([#117](https://github.com/after2400/liars-dice/pull/117),
+  [`690edec`](https://github.com/after2400/liars-dice/commit/690edec04ae50c9306c3012de739724739efe57e))
+
+
 ## v1.12.1 (2026-06-25)
 
 ### Bug Fixes
