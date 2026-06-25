@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v1.12.0 (2026-06-25)
+
+### Features
+
+- **engine**: Add dice_counts to GameStats
+  ([#111](https://github.com/after2400/liars-dice/pull/111),
+  [`1cd1781`](https://github.com/after2400/liars-dice/commit/1cd178162e7a2457bd222cab15b1ca806be79949))
+
+
 ## v1.11.0 (2026-06-20)
 
 ### Features
