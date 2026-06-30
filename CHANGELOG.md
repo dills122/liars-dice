@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v2.1.1 (2026-06-30)
+
+### Bug Fixes
+
+- **scripts**: Sort tier standings by current-run results; pin relegated players to top
+  ([#130](https://github.com/after2400/liars-dice/pull/130),
+  [`8387989`](https://github.com/after2400/liars-dice/commit/8387989f778d6e20128750123bcd114b7edaac7a))
+
+
 ## v2.1.0 (2026-06-30)
 
 ### Features
