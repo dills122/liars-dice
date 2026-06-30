@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v2.2.0 (2026-06-30)
+
+### Features
+
+- **engine**: Add ones_are_wild to GameStats
+  ([#134](https://github.com/after2400/liars-dice/pull/134),
+  [`35802c7`](https://github.com/after2400/liars-dice/commit/35802c7fecbadfd004eca3fa1213921f46048b6b))
+
+
 ## v2.1.1 (2026-06-30)
 
 ### Bug Fixes
