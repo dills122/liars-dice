@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v2.5.0 (2026-07-01)
+
+### Features
+
+- Add optional Cloudinary avatars for players
+  ([#157](https://github.com/after2400/liars-dice/pull/157),
+  [`1195eb5`](https://github.com/after2400/liars-dice/commit/1195eb5d5a67349ec4655f4763dd12600818c131))
+
+
 ## v2.4.1 (2026-07-01)
 
 ### Bug Fixes
