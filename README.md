@@ -13,65 +13,65 @@ Interested in competing? **[Visit the Wiki](https://github.com/after2400/liars-d
 ### Premier
 | Player | Season W% | Wins in PRM | Win % Total | Total Wins | Games |
 |--------|-----------|----------------|-------------|------------|-------|
-| The Merovingian | 25.9 | 259 | 35.4 | 1061 | 3000 |
-| EvilStewie | 17.3 | 2014 | 18.0 | 2335 | 13000 |
-| Deep Thought | 13.1 | 1736 | 15.8 | 1736 | 11000 |
-| Peter Beter | 10.7 | 2075 | 16.9 | 2366 | 14000 |
-| Stewie | 10.2 | 4178 | 18.6 | 4831 | 26000 |
-| Peter Griffin | 8.9 | 2097 | 15.0 | 2097 | 14000 |
-| Nuke LaLoosh | 7.4 | 3009 | 17.0 | 4082 | 24000 |
-| Sloane | 6.5 | 3905 | 18.1 | 7586 | 42000 |
+| The Merovingian | 20.7 | 466 | 31.7 | 1268 | 4000 |
+| EvilStewie | 18.0 | 2194 | 18.0 | 2515 | 14000 |
+| Deep Thought | 12.7 | 1863 | 15.5 | 1863 | 12000 |
+| Stewie | 10.2 | 4280 | 18.3 | 4933 | 27000 |
+| Peter Beter | 9.8 | 2173 | 16.4 | 2464 | 15000 |
+| Peter Griffin | 7.7 | 2174 | 14.5 | 2174 | 15000 |
+| Sloane | 7.5 | 3980 | 17.8 | 7661 | 43000 |
+| Nuke LaLoosh | 7.2 | 3081 | 16.6 | 4154 | 25000 |
 
 ### Championship
 | Player | Season W% | Wins in CH | Win % Total | Total Wins | Games |
 |--------|-----------|----------------|-------------|------------|-------|
-| Columbo | 12.4 | 556 | 16.7 | 1003 | 6000 |
-| Diego | 11.4 | 2404 | 17.7 | 6086 | 34350 |
-| Zara | 11.3 | 3772 | 18.7 | 6187 | 33000 |
-| Eva | 9.3 | 5186 | 19.3 | 6564 | 34000 |
-| Cal Culatid | 8.9 | 2323 | 17.7 | 3887 | 22000 |
-| Honest Abe | 8.7 | 2386 | 14.3 | 2859 | 20000 |
-| Finn | 4.6 | 2225 | 17.2 | 6410 | 37250 |
+| Columbo | Relegated | 762 | 15.9 | 1271 | 8000 |
+| Zara | 14.7 | 3919 | 18.6 | 6334 | 34000 |
+| Cal Culatid | 14.5 | 2468 | 17.5 | 4032 | 23000 |
+| Diego | 13.4 | 2538 | 17.6 | 6220 | 35350 |
+| Eva | 12.5 | 5311 | 19.1 | 6689 | 35000 |
+| Honest Abe | 11.1 | 2497 | 14.1 | 2970 | 21000 |
+| Remy | 7.2 | 3606 | 17.2 | 8259 | 48000 |
 
 ### Level 1
 | Player | Season W% | Wins in L1 | Win % Total | Total Wins | Games |
 |--------|-----------|----------------|-------------|------------|-------|
-| Remy | 13.7 | 4195 | 17.3 | 7941 | 46000 |
-| Rick Sanchez | 10.5 | 3213 | 16.9 | 3213 | 19000 |
-| Bruno | 8.9 | 2984 | 12.5 | 3939 | 31450 |
-| Alice | 8.7 | 3986 | 15.7 | 5079 | 32450 |
-| Meg Griffin | 6.9 | 285 | 9.5 | 285 | 3000 |
-| Liar², Pants on Fire | 2.0 | 925 | 4.0 | 925 | 23000 |
-| Topper | 1.5 | 2283 | 8.2 | 2283 | 28000 |
-| Cleo | 1.0 | 1660 | 5.2 | 1677 | 32450 |
+| Finn | Relegated | 3730 | 16.9 | 6470 | 38250 |
+| Meg Griffin | 16.5 | 450 | 11.2 | 450 | 4000 |
+| Alice | 15.9 | 4145 | 15.7 | 5238 | 33450 |
+| Rick Sanchez | 15.5 | 3368 | 16.8 | 3368 | 20000 |
+| Bruno | 13.9 | 3123 | 12.6 | 4078 | 32450 |
+| Topper | 5.9 | 2342 | 8.1 | 2342 | 29000 |
+| Liar², Pants on Fire | 5.1 | 976 | 4.1 | 976 | 24000 |
+| Cleo | 2.6 | 1686 | 5.1 | 1703 | 33450 |
 
 ### Quarter Leaderboard
 
 | Player | Tier | PRM W% | CH W% | L1 W% | Total W% | Games |
 |--------|------|--------|-------|-------|----------|-------|
-| The Merovingian | Premier | 25.9 | 33.4 | 46.8 | 35.4 | 3000 |
-| Zara | Championship | 20.1 | 18.0 | — | 18.7 | 33000 |
-| Diego | Championship | 18.1 | 17.2 | — | 17.7 | 34350 |
-| Stewie | Premier | 17.4 | 36.5 | 28.8 | 18.6 | 26000 |
-| Eva | Championship | 17.2 | 19.9 | — | 19.3 | 34000 |
-| EvilStewie | Premier | 16.8 | 32.1 | — | 18.0 | 13000 |
-| Peter Beter | Premier | 16.0 | 29.1 | — | 16.9 | 14000 |
-| Deep Thought | Premier | 15.8 | — | — | 15.8 | 11000 |
-| Sloane | Premier | 15.0 | 23.0 | — | 18.1 | 42000 |
-| Peter Griffin | Premier | 15.0 | — | — | 15.0 | 14000 |
-| Alice | Level 1 | 14.8 | 12.6 | 16.6 | 15.7 | 32450 |
-| Nuke LaLoosh | Premier | 14.3 | 27.6 | 52.1 | 17.0 | 24000 |
-| Finn | Championship | 14.0 | 13.1 | 21.9 | 17.2 | 37250 |
-| Cal Culatid | Championship | 12.8 | 17.9 | 26.5 | 17.7 | 22000 |
-| Bruno | Level 1 | 10.9 | 13.8 | 12.4 | 12.5 | 31450 |
-| Remy | Level 1 | 10.6 | 14.1 | 22.1 | 17.3 | 46000 |
-| Columbo | Championship | 7.7 | 18.5 | 29.3 | 16.7 | 6000 |
-| Cleo | Level 1 | 1.1 | 0.3 | 5.9 | 5.2 | 32450 |
-| Honest Abe | Championship | — | 13.3 | 23.6 | 14.3 | 20000 |
-| Rick Sanchez | Level 1 | — | — | 16.9 | 16.9 | 19000 |
-| Meg Griffin | Level 1 | — | — | 9.5 | 9.5 | 3000 |
-| Topper | Level 1 | — | — | 8.2 | 8.2 | 28000 |
-| Liar², Pants on Fire | Level 1 | — | — | 4.0 | 4.0 | 23000 |
+| The Merovingian | Premier | 23.3 | 33.4 | 46.8 | 31.7 | 4000 |
+| Zara | Championship | 20.1 | 17.8 | — | 18.6 | 34000 |
+| Diego | Championship | 18.1 | 16.9 | — | 17.6 | 35350 |
+| Eva | Championship | 17.2 | 19.7 | — | 19.1 | 35000 |
+| Stewie | Premier | 17.1 | 36.5 | 28.8 | 18.3 | 27000 |
+| EvilStewie | Premier | 16.9 | 32.1 | — | 18.0 | 14000 |
+| Peter Beter | Premier | 15.5 | 29.1 | — | 16.4 | 15000 |
+| Deep Thought | Premier | 15.5 | — | — | 15.5 | 12000 |
+| Alice | Level 1 | 14.8 | 12.6 | 16.6 | 15.7 | 33450 |
+| Sloane | Premier | 14.7 | 23.0 | — | 17.8 | 43000 |
+| Peter Griffin | Premier | 14.5 | — | — | 14.5 | 15000 |
+| Nuke LaLoosh | Premier | 14.0 | 27.6 | 52.1 | 16.6 | 25000 |
+| Finn | Level 1 | 14.0 | 12.7 | 21.9 | 16.9 | 38250 |
+| Cal Culatid | Championship | 12.8 | 17.6 | 26.5 | 17.5 | 23000 |
+| Bruno | Level 1 | 10.9 | 13.8 | 12.5 | 12.6 | 32450 |
+| Remy | Championship | 10.6 | 13.9 | 22.2 | 17.2 | 48000 |
+| Columbo | Championship | 7.2 | 19.1 | 29.3 | 15.9 | 8000 |
+| Cleo | Level 1 | 1.1 | 0.3 | 5.8 | 5.1 | 33450 |
+| Honest Abe | Championship | — | 13.1 | 23.6 | 14.1 | 21000 |
+| Rick Sanchez | Level 1 | — | — | 16.8 | 16.8 | 20000 |
+| Meg Griffin | Level 1 | — | — | 11.2 | 11.2 | 4000 |
+| Topper | Level 1 | — | — | 8.1 | 8.1 | 29000 |
+| Liar², Pants on Fire | Level 1 | — | — | 4.1 | 4.1 | 24000 |
 
 <!-- leaderboard-end -->
 <!-- prettier-ignore-end -->
