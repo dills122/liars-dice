@@ -196,6 +196,7 @@ players:
         wins: 1020
         games: 26000
         win_pct: 3.9
+    avatar: hdyiihba/Liar_Liar.png
   Nuke:
     display_name: Nuke LaLoosh
     github_username: after2400
