@@ -115,6 +115,7 @@ players:
         wins: 1378
         games: 8000
         win_pct: 17.2
+    avatar: hdyiihba/Eva_Longoria.png
   Sloane:
     display_name: Sloane
     github_username: after2400
