@@ -183,6 +183,7 @@ players:
         wins: 2387
         games: 31000
         win_pct: 7.7
+    avatar: hdyiihba/Topper.png
   Pyro:
     display_name: "Liar\xB2, Pants on Fire"
     github_username: after2400
