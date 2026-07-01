@@ -132,6 +132,7 @@ players:
         wins: 4113
         games: 29000
         win_pct: 14.2
+    avatar: hdyiihba/Sloane_Avery.png
   Zara:
     display_name: Zara
     github_username: after2400
