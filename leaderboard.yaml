@@ -98,6 +98,7 @@ players:
         wins: 3977
         games: 19000
         win_pct: 20.9
+    avatar: hdyiihba/Finn_Carter.png
   Eva:
     display_name: Eva
     github_username: after2400
