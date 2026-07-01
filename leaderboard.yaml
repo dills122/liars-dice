@@ -1,5 +1,5 @@
 total_runs: 99
-last_updated: '2026-07-01T20:40:15Z'
+last_updated: '2026-07-01T20:51:17Z'
 current_season_issue: 4
 players:
   Alice:
@@ -406,3 +406,11 @@ players:
         wins: 173
         games: 1000
         win_pct: 17.3
+  Ripley:
+    display_name: Ripley
+    github_username: iappanaitis
+    date_added: '2026-07-01T20:51:17Z'
+    tier: L1
+    tier_since: '2026-07-01T20:51:17Z'
+    times_inactive: 0
+    tier_stats: {}
