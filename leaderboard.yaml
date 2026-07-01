@@ -1,5 +1,5 @@
 total_runs: 102
-last_updated: '2026-07-01T21:28:18Z'
+last_updated: '2026-07-01T23:05:55Z'
 current_season_issue: 4
 players:
   Alice:
@@ -426,3 +426,11 @@ players:
         wins: 173
         games: 1000
         win_pct: 17.3
+  Hal:
+    display_name: HAL 9000
+    github_username: fransposito
+    date_added: '2026-07-01T23:05:55Z'
+    tier: L1
+    tier_since: '2026-07-01T23:05:55Z'
+    times_inactive: 0
+    tier_stats: {}
