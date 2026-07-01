@@ -354,6 +354,7 @@ players:
         wins: 600
         games: 6000
         win_pct: 10.0
+    avatar: hdyiihba/Meg_Griffin.png
   Columbo:
     display_name: Columbo
     github_username: iappanaitis
