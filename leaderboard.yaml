@@ -149,6 +149,7 @@ players:
         wins: 2415
         games: 12000
         win_pct: 20.1
+    avatar: hdyiihba/Zara.png
   Remy:
     display_name: Remy
     github_username: after2400
