@@ -395,6 +395,7 @@ players:
         wins: 818
         games: 4000
         win_pct: 20.4
+    avatar: hdyiihba/The_Merovingian.png
   Oracle:
     display_name: The Oracle
     github_username: DNiev
