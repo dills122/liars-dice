@@ -170,6 +170,7 @@ players:
         wins: 4441
         games: 20000
         win_pct: 22.2
+    avatar: hdyiihba/Remy_Beasley.png
   Topper:
     display_name: Topper
     github_username: after2400
