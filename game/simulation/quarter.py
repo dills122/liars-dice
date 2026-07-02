@@ -38,6 +38,7 @@ def run_step(
     replaydb=None,
     week_num: int = 1,
     recording: bool = False,
+    profile_memory: bool = False,
 ) -> str:
     """Run one Monday step in-process. Returns captured stdout text for the report.
 
@@ -59,6 +60,7 @@ def run_step(
                 replaydb=replaydb,
                 week_num=week_num,
                 recording=recording,
+                profile_memory=profile_memory,
             )
         else:
             from game.simulation.season import run_season
@@ -71,6 +73,7 @@ def run_step(
                 replaydb=replaydb,
                 week_num=week_num,
                 recording=recording,
+                profile_memory=profile_memory,
             )
     output = buf.getvalue()
     print(output, end="")
@@ -119,7 +122,7 @@ def write_report(
     n_games: int,
 ) -> None:
     """Write a plain-Markdown simulation report."""
-    from game.components.leaderboard import build_display_names
+    from game.components.leaderboard import avatar_img_tag, build_display_names
     from game.season.utils import _load_lb
 
     data = _load_lb(lb_path)
@@ -159,7 +162,7 @@ def write_report(
             lines.append(f"| Player | Win % in {tier} | Wins | Win % Total | Total Wins | Games |")
             lines.append("|--------|----------------|------|-------------|------------|-------|")
             for name, p in tier_players:
-                display = display_names.get(name, name)
+                display = f"{avatar_img_tag(name, p)} {display_names.get(name, name)}"
                 ts = p.get("tier_stats", {}).get(tier, {})
                 all_ts = p.get("tier_stats", {}).values()
                 total_wins = sum(t.get("wins", 0) for t in all_ts)
@@ -286,6 +289,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         default=False,
         help="Launch the Textual TUI dashboard.",
+    )
+    parser.add_argument(
+        "--profile-memory",
+        action="store_true",
+        default=False,
+        help="Enable tracemalloc-based peak memory profiling per algo() call (adds overhead).",
     )
     parser.add_argument(
         "--save-replay",
@@ -432,6 +441,7 @@ def main() -> None:
                         replaydb=replaydb,
                         week_num=i + 1,
                         recording=recording,
+                        profile_memory=args.profile_memory,
                     )
                     elapsed = time.perf_counter() - t0
                     print(f"[simulate] done in {elapsed:.1f}s")
@@ -456,6 +466,7 @@ def main() -> None:
                     replaydb=replaydb,
                     week_num=i + 1,
                     recording=recording,
+                    profile_memory=args.profile_memory,
                 )
                 elapsed = time.perf_counter() - t0
                 print(f"[simulate] done in {elapsed:.1f}s")

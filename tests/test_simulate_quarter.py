@@ -167,7 +167,7 @@ def test_run_step_passes_replaydb_to_tournament(monkeypatch):
     received = {}
 
     def fake_run_tournament(
-        n_games, lb_path, dashboard=None, replaydb=None, week_num=1, recording=False
+        n_games, lb_path, dashboard=None, replaydb=None, week_num=1, recording=False, **kwargs
     ):
         received["replaydb"] = replaydb
         received["week_num"] = week_num
@@ -203,7 +203,14 @@ def test_run_step_passes_replaydb_to_season(monkeypatch):
     received = {}
 
     def fake_run_season(
-        n_games, top_n, lb_path, dashboard=None, replaydb=None, week_num=1, recording=False
+        n_games,
+        top_n,
+        lb_path,
+        dashboard=None,
+        replaydb=None,
+        week_num=1,
+        recording=False,
+        **kwargs,
     ):
         received["replaydb"] = replaydb
         received["week_num"] = week_num
@@ -321,3 +328,63 @@ def test_parse_args_n_games_override(monkeypatch):
     monkeypatch.setattr(sys, "argv", ["quarter.py", "--n-games", "50"])
     args = parse_args()
     assert args.n_games == 50
+
+
+def test_write_report_includes_avatar_img_tag(tmp_path):
+    from game.simulation.quarter import write_report
+
+    lb = tmp_path / "leaderboard.yaml"
+    lb.write_text(
+        "players:\n"
+        "  Diego:\n"
+        "    tier: PRM\n"
+        "    display_name: Diego\n"
+        "    github_username: ''\n"
+        "    tier_stats:\n"
+        "      PRM:\n"
+        "        wins: 100\n"
+        "        games: 200\n"
+        "        win_pct: 50.0\n"
+    )
+    out = tmp_path / "report.md"
+    write_report([], str(lb), out, n_games=50)
+
+    text = out.read_text()
+    assert "<img src=" in text
+    assert 'width="64" height="64"' in text
+
+
+def test_run_step_passes_profile_memory_to_run_tournament(monkeypatch):
+    from game.simulation.quarter import run_step
+
+    calls = []
+
+    def fake_run_tournament(n_games, lb_path, dashboard=None, **kwargs):
+        calls.append(kwargs.get("profile_memory"))
+
+    import sys
+
+    fake_mod = type(sys)("game.simulation.tournament")
+    fake_mod.run_tournament = fake_run_tournament
+    monkeypatch.setitem(sys.modules, "game.simulation.tournament", fake_mod)
+
+    run_step(date(2026, 7, 6), "tournament", n_games=5, lb_path="lb.yaml", profile_memory=True)
+    assert calls == [True]
+
+
+def test_run_step_defaults_profile_memory_to_false(monkeypatch):
+    from game.simulation.quarter import run_step
+
+    calls = []
+
+    def fake_run_season(n_games, top_n, lb_path, dashboard=None, **kwargs):
+        calls.append(kwargs.get("profile_memory"))
+
+    import sys
+
+    fake_mod = type(sys)("game.simulation.season")
+    fake_mod.run_season = fake_run_season
+    monkeypatch.setitem(sys.modules, "game.simulation.season", fake_mod)
+
+    run_step(date(2026, 7, 13), "season", n_games=5, lb_path="lb.yaml")
+    assert calls == [False]

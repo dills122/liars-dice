@@ -1,6 +1,48 @@
 # CHANGELOG
 
 
+## v2.6.0 (2026-07-02)
+
+### Features
+
+- **game**: Player performance instrumentation (wall/CPU/memory)
+  ([#173](https://github.com/after2400/liars-dice/pull/173),
+  [`6ce352b`](https://github.com/after2400/liars-dice/commit/6ce352bb571fb85cf079f9e8d08da9e6759d9d36))
+
+
+## v2.5.1 (2026-07-02)
+
+### Bug Fixes
+
+- **workflows**: Share one concurrency group across leaderboard writers
+  ([#170](https://github.com/after2400/liars-dice/pull/170),
+  [`15b3130`](https://github.com/after2400/liars-dice/commit/15b3130af09294af3d3a096ca7e140fab0a4534f))
+
+
+## v2.5.0 (2026-07-01)
+
+### Features
+
+- Add optional Cloudinary avatars for players
+  ([#157](https://github.com/after2400/liars-dice/pull/157),
+  [`1195eb5`](https://github.com/after2400/liars-dice/commit/1195eb5d5a67349ec4655f4763dd12600818c131))
+
+
+## v2.4.1 (2026-07-01)
+
+### Bug Fixes
+
+- **workflows**: Opt in to fork PR checkout, gate uv sync on scope check
+  ([#155](https://github.com/after2400/liars-dice/pull/155),
+  [`b5044e7`](https://github.com/after2400/liars-dice/commit/b5044e74da416fd1d82270f47ac1d4a1c808bfad))
+
+### Continuous Integration
+
+- **workflows**: Fix auto-update skipping UNKNOWN-state player PRs
+  ([#145](https://github.com/after2400/liars-dice/pull/145),
+  [`4bce24f`](https://github.com/after2400/liars-dice/commit/4bce24f022763bd6132de6a0ae359145da81d208))
+
+
 ## v2.4.0 (2026-06-30)
 
 ### Continuous Integration
