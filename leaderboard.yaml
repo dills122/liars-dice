@@ -326,6 +326,7 @@ players:
         wins: 2403
         games: 16000
         win_pct: 15.0
+    avatar: dfcgw5cr6/Deep_Thought.jpg
   EvilStewie:
     display_name: EvilStewie
     github_username: zachaustin01
